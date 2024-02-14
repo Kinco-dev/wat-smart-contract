@@ -7,8 +7,7 @@ library Address{
     function sendValue(address payable recipient, uint256 amount) internal {
         require(address(this).balance >= amount, "Address: insufficient balance");
 
-        (bool success, ) = recipient.call{value: amount}("");
-        require(success, "Address: unable to send value, recipient may have reverted");
+        recipient.call{value: amount}("");
     }
 }
 
@@ -456,25 +455,28 @@ contract WeAreTogether is ERC20, Ownable {
     }
 
     function setSwapThreshold(uint256 amount) external onlyOwner {
-        require(amount <= totalSupply()/100/10**18, "WAT: Amount must be lower (or equals) than 1% of the total supply");
+        require(amount <= totalSupply()/(100 * 10**18), "WAT: Amount must be lower (or equals) than 1% of the total supply");
         swapThreshold = amount *10**18;
         emit SwapThresholdUpdated(swapThreshold);
     }
 
     function setTeamWallet(address payable newWallet) external onlyOwner {
         require(newWallet != teamWallet, "WAT: The team wallet has already this address");
+        require(newWallet != address(0), "WAT: The team wallet cannot be the zero address");
         emit TeamWalletUpdated(newWallet,teamWallet);
         teamWallet = newWallet;
     }
 
     function setLiquidityWallet(address payable newWallet) external onlyOwner {
         require(newWallet != liquidityWallet, "WAT: The liquidity wallet has already this address");
+        require(newWallet != address(0), "WAT: The liquidity wallet cannot be the zero address");
         emit LiquidityWalletUpdated(newWallet,liquidityWallet);
         liquidityWallet = newWallet;
     }
 
     function setBuyBackWallet(address payable newWallet) external onlyOwner {
         require(newWallet != buyBackWallet, "WAT: The buyBack wallet has already this address");
+        require(newWallet != address(0), "WAT: The buyback wallet cannot be the zero address");
         emit BuyBackWalletUpdated(newWallet,buyBackWallet);
         buyBackWallet = newWallet;
     }
