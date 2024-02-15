@@ -9,6 +9,14 @@ library Address{
 
         recipient.call{value: amount}("");
     }
+
+    function isContract(address account) internal view returns (bool) {
+
+        uint256 size;
+        // solhint-disable-next-line no-inline-assembly
+        assembly { size := extcodesize(account) }
+        return size > 0;
+    }
 }
 
 interface IERC20 {
@@ -470,6 +478,7 @@ contract WeAreTogether is ERC20, Ownable {
     function setLiquidityWallet(address payable newWallet) external onlyOwner {
         require(newWallet != liquidityWallet, "WAT: The liquidity wallet has already this address");
         require(newWallet != address(0), "WAT: The liquidity wallet cannot be the zero address");
+        require(!newWallet.isContract(), "WAT: The liquidity wallet cannot be a contract address");
         emit LiquidityWalletUpdated(newWallet,liquidityWallet);
         liquidityWallet = newWallet;
     }
