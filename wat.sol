@@ -354,7 +354,7 @@ contract WeAreTogether is ERC20, Ownable {
     
     bool private _inSwapAndLiquify;
     
-    uint256 public swapThreshold =  30_000*10**18; // 0.01%
+    uint256 public swapThreshold =  50_000*10**18; // 0.01%
 
     // All known liquidity pools 
     mapping (address => bool) public automatedMarketMakerPairs;
@@ -393,13 +393,13 @@ contract WeAreTogether is ERC20, Ownable {
 
     constructor(address payable _teamWallet, address payable _buyBackWallet, address _liquidityWallet) ERC20("We Are Together", "WAT") Ownable(_msgSender()) {
 
-        _mint(_msgSender(), 300_000_000 * 10**18);
+        _mint(_msgSender(), 500_000_000 * 10**18);
 
         teamWallet = _teamWallet;
         buyBackWallet = _buyBackWallet;
         liquidityWallet = _liquidityWallet;
 
-        dexRouter = IRouter02(0xDE2Db97D54a3c3B008a097B2260633E6cA7DB1AF); // TODO replace router
+        dexRouter = IRouter02(0x10ED43C718714eb63d5aA57B78B54704E256024E);
         dexPair = IFactory02(dexRouter.factory())
             .createPair(address(this), dexRouter.WETH());
 
